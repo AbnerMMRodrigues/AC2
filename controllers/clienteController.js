@@ -105,10 +105,18 @@ exports.atualizarCliente = (req, res) => {
 
 exports.apagarCliente = (req, res) => {
     const id = parseInt(req.params.id);
-    const cliente = clientes.find(u => u.id === id);
-    if (cliente) {
-        clientes.delete(cliente);
+    const indice = clientes.findIndex(u => u.id === id);
+
+    if (indice !== -1) {
+        const clienteRemovido = clientes.splice(indice, 1);
+
+        res.json({
+            mensagem: 'Cliente removido com sucesso!',
+            cliente: clienteRemovido[0]
+        });
     } else {
-        res.status(400).json({ mensagem: 'ID não existente' });
+        res.status(404).json({
+            mensagem: 'ID não existente'
+        });
     }
-}
+};
